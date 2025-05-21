@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flex, TextField, Box } from '@radix-ui/themes';
 
 type UrlTabProps = {
   oldUrl: string;
@@ -9,20 +10,28 @@ type UrlTabProps = {
 
 const UrlTab: React.FC<UrlTabProps> = ({ oldUrl, newUrl, setOldUrl, setNewUrl }) => {
   return (
-    <div className="flex gap-4 mb-6">
-      <input 
-        value={oldUrl}
-        onChange={(e) => setOldUrl(e.target.value)}
-        placeholder="URL do relatório HTML antigo" 
-        className="w-1/2 p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      />
-      <input 
-        value={newUrl}
-        onChange={(e) => setNewUrl(e.target.value)}
-        placeholder="URL do relatório HTML novo" 
-        className="w-1/2 p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      />
-    </div>
+    <Flex gap="4" mb="6">
+      <Box style={{ width: '50%' }}>
+        <TextField.Root
+            className="rt-reset rt-TextFieldInput"
+            type='url'
+            value={oldUrl}
+            onChange={(e) => setOldUrl(e.target.value)}
+            placeholder="URL do relatório HTML antigo" 
+            spellCheck="false"
+        />
+      </Box>
+      <Box style={{ width: '50%' }}>
+        <TextField.Root
+            className="rt-reset rt-TextFieldInput"
+            type='url'
+            value={newUrl}
+            onChange={(e) => setNewUrl(e.target.value)}
+            placeholder="URL do relatório HTML novo" 
+            spellCheck="false"
+        />
+      </Box>
+    </Flex>
   );
 };
 

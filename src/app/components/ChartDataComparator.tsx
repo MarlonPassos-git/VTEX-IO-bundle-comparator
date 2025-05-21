@@ -1,10 +1,18 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import * as Select from "@radix-ui/react-select";
-import * as Tabs from "@radix-ui/react-tabs";
-import * as Separator from "@radix-ui/react-separator";
-import * as Label from "@radix-ui/react-label";
+import { 
+  Container, 
+  Heading, 
+  Text, 
+  Flex, 
+  Tabs, 
+  Box, 
+  Select, 
+  Separator, 
+  Button,
+  Card
+} from "@radix-ui/themes";
 
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -167,142 +175,97 @@ const ChartDataComparator = () => {
       env: "dev",
       mode: "dev"
     });
-  };
+  };  return (
+    <Container size="4" px="4" py="8">
+      <Flex direction="column" gap="6">
+        <Box>
+          <Heading as="h1" size="6" mb="2">📊 Relatório de Bundle ChartData</Heading>
+          <Separator size="4" my="4" />
+          <Text color="gray" size="2">Compare dois bundles ChartData para analisar diferenças de tamanho</Text>
+        </Box>
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">📊 Relatório de Bundle ChartData</h1>
-        <Separator.Root className="h-[1px] bg-gray-200 my-4" />
-        <p className="text-gray-600">Compare dois bundles ChartData para analisar diferenças de tamanho</p>
-      </header>
-
-      <div className="mb-4">
-        <Label.Root className="mr-4 font-medium" htmlFor="inputMode">
-          Modo de entrada:
-        </Label.Root>
-        <Select.Root value={inputMode} onValueChange={setInputMode}>
-          <Select.Trigger 
-            className="p-2 rounded border border-gray-300 inline-flex gap-1 items-center justify-between min-w-[160px]"
-            aria-label="Selecione o modo de entrada"
-          >
-            <Select.Value placeholder="Selecione o modo" />
-            <Select.Icon className="text-gray-500">
-              <ChevronDownIcon />
-            </Select.Icon>
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Content 
-              className="bg-white shadow-lg rounded-md overflow-hidden z-50 border border-gray-200"
-              position="popper"
-              sideOffset={5}
-            >
-              <Select.ScrollUpButton className="flex items-center justify-center h-6 bg-white text-gray-700 cursor-default">
-                <ChevronUpIcon />
-              </Select.ScrollUpButton>
-              <Select.Viewport className="p-1">
-                <Select.Item value="json" className="relative flex items-center h-8 px-6 rounded text-sm text-gray-700 hover:bg-blue-100 data-[highlighted]:bg-blue-100 data-[highlighted]:outline-none data-[highlighted]:text-blue-900 select-none">
-                  <Select.ItemText>Colar JSON</Select.ItemText>
-                  <Select.ItemIndicator className="absolute left-1 inline-flex items-center justify-center">
-                    <CheckIcon />
-                  </Select.ItemIndicator>
-                </Select.Item>
-                <Select.Item value="url" className="relative flex items-center h-8 px-6 rounded text-sm text-gray-700 hover:bg-blue-100 data-[highlighted]:bg-blue-100 data-[highlighted]:outline-none data-[highlighted]:text-blue-900 select-none">
-                  <Select.ItemText>Usar URLs HTML</Select.ItemText>
-                  <Select.ItemIndicator className="absolute left-1 inline-flex items-center justify-center">
-                    <CheckIcon />
-                  </Select.ItemIndicator>
-                </Select.Item>
-                <Select.Item value="vtex" className="relative flex items-center h-8 px-6 rounded text-sm text-gray-700 hover:bg-blue-100 data-[highlighted]:bg-blue-100 data-[highlighted]:outline-none data-[highlighted]:text-blue-900 select-none">
-                  <Select.ItemText>VTEX IO bundle</Select.ItemText>
-                  <Select.ItemIndicator className="absolute left-1 inline-flex items-center justify-center">
-                    <CheckIcon />
-                  </Select.ItemIndicator>
-                </Select.Item>
-              </Select.Viewport>
-              <Select.ScrollDownButton className="flex items-center justify-center h-6 bg-white text-gray-700 cursor-default">
-                <ChevronDownIcon />
-              </Select.ScrollDownButton>
+        <Flex align="center" gap="2" mb="4">
+          <Text weight="medium">Modo de entrada:</Text>
+          <Select.Root value={inputMode} onValueChange={setInputMode}>
+            <Select.Trigger placeholder="Selecione o modo" />
+            <Select.Content position="popper">
+              <Select.Item value="json">Colar JSON</Select.Item>
+              <Select.Item value="url">Usar URLs HTML</Select.Item>
+              <Select.Item value="vtex">VTEX IO bundle</Select.Item>
             </Select.Content>
-          </Select.Portal>
-        </Select.Root>
-      </div>
+          </Select.Root>
+        </Flex>        <Card>
+          <Box p="4">
+            <Tabs.Root defaultValue="json" value={inputMode} onValueChange={setInputMode}>
+              <Tabs.List>
+                <Tabs.Trigger value="json">Entrada JSON</Tabs.Trigger>
+                <Tabs.Trigger value="url">Entrada URL</Tabs.Trigger>
+                <Tabs.Trigger value="vtex">VTEX IO bundle</Tabs.Trigger>
+              </Tabs.List>
+              
+              <Box mt="4" mb="4">
+                <Tabs.Content value="json">
+                  <JsonTab 
+                    oldJson={oldJson} 
+                    newJson={newJson} 
+                    setOldJson={setOldJson} 
+                    setNewJson={setNewJson} 
+                  />
+                </Tabs.Content>
 
-      <Tabs.Root defaultValue="json" value={inputMode} onValueChange={setInputMode}>
-        <Tabs.List className="flex border-b border-gray-200 mb-4">
-          <Tabs.Trigger 
-            value="json" 
-            className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 focus:outline-none"
-          >
-            Entrada JSON
-          </Tabs.Trigger>
-          <Tabs.Trigger 
-            value="url" 
-            className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 focus:outline-none"
-          >
-            Entrada URL
-          </Tabs.Trigger>
-          <Tabs.Trigger 
-            value="vtex" 
-            className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 focus:outline-none"
-          >
-            VTEX IO bundle
-          </Tabs.Trigger>
-        </Tabs.List>        <Tabs.Content value="json">
-          <JsonTab 
-            oldJson={oldJson} 
-            newJson={newJson} 
-            setOldJson={setOldJson} 
-            setNewJson={setNewJson} 
-          />
-        </Tabs.Content>
+                <Tabs.Content value="url">
+                  <UrlTab 
+                    oldUrl={oldUrl} 
+                    newUrl={newUrl} 
+                    setOldUrl={setOldUrl} 
+                    setNewUrl={setNewUrl} 
+                  />
+                </Tabs.Content>
 
-        <Tabs.Content value="url">
-          <UrlTab 
-            oldUrl={oldUrl} 
-            newUrl={newUrl} 
-            setOldUrl={setOldUrl} 
-            setNewUrl={setNewUrl} 
-          />
-        </Tabs.Content>
+                <Tabs.Content value="vtex">
+                  <VtexTab 
+                    vtexOld={vtexOld} 
+                    vtexNew={vtexNew} 
+                    setVtexOld={setVtexOld} 
+                    setVtexNew={setVtexNew} 
+                    oldUrl={oldUrl} 
+                    newUrl={newUrl} 
+                  />
+                </Tabs.Content>
+              </Box>
+            </Tabs.Root>
 
-        <Tabs.Content value="vtex">
-          <VtexTab 
-            vtexOld={vtexOld} 
-            vtexNew={vtexNew} 
-            setVtexOld={setVtexOld} 
-            setVtexNew={setVtexNew} 
-            oldUrl={oldUrl} 
-            newUrl={newUrl} 
-          />
-        </Tabs.Content>
-      </Tabs.Root>
-
-      <div className="flex gap-4 mb-6">
-        <button 
-          onClick={handleCompare} 
-          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-        >
-          Comparar
-        </button>
-        <button 
-          onClick={clearData} 
-          className="px-6 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
-        >
-          Limpar
-        </button>
-      </div>      {/* Exibição dos resultados */}
-      {results.length > 0 && (
-        <ResultsDisplay 
-          results={results}
-          added={added}
-          removed={removed}
-          bundleSize={bundleSize}
-          parsedSize={parsedSize}
-          gzipSize={gzipSize}
-        />
-      )}
-    </div>
+            <Flex gap="4" mb="6">
+              <Button 
+                onClick={handleCompare} 
+                color="indigo"
+              >
+                Comparar
+              </Button>
+              <Button 
+                onClick={clearData} 
+                variant="soft"
+                color="gray"
+              >
+                Limpar
+              </Button>
+            </Flex>
+            
+            {/* Exibição dos resultados */}
+            {results.length > 0 && (
+              <ResultsDisplay 
+                results={results}
+                added={added}
+                removed={removed}
+                bundleSize={bundleSize}
+                parsedSize={parsedSize}
+                gzipSize={gzipSize}
+              />
+            )}
+          </Box>
+        </Card>
+      </Flex>
+    </Container>
   );
 };
 

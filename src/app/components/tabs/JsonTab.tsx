@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flex, TextArea } from '@radix-ui/themes';
 
 type JsonTabProps = {
   oldJson: string;
@@ -9,20 +10,20 @@ type JsonTabProps = {
 
 const JsonTab: React.FC<JsonTabProps> = ({ oldJson, newJson, setOldJson, setNewJson }) => {
   return (
-    <div className="flex gap-4 mb-6">
-      <textarea 
+    <Flex gap="4" mb="6">
+      <TextArea 
         value={oldJson}
         onChange={(e) => setOldJson(e.target.value)}
         placeholder="JSON ChartData antigo" 
-        className="w-1/2 p-3 rounded border border-gray-300 h-48 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        style={{ width: '50%', height: '200px' }}
       />
-      <textarea 
+      <TextArea 
         value={newJson}
         onChange={(e) => setNewJson(e.target.value)}
         placeholder="JSON ChartData novo" 
-        className="w-1/2 p-3 rounded border border-gray-300 h-48 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        style={{ width: '50%', height: '200px' }}
       />
-    </div>
+    </Flex>
   );
 };
 

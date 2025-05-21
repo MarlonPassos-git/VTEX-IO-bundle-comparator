@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box, Flex, Text, TextField, Select, Card } from '@radix-ui/themes';
 
 export type VtexBundleState = {
   workspace: string;
@@ -27,123 +28,151 @@ const VtexTab: React.FC<VtexTabProps> = ({
   newUrl 
 }) => {
   return (
-    <div className="flex flex-col gap-4 mb-6">
-      <div className="flex flex-col md:flex-row gap-8">
+    <Flex direction="column" gap="4" mb="6">
+      <Flex direction={{initial: "column", md: "row"}} gap="8">
         {/* Antigo */}
-        <div className="flex-1 border rounded p-4 bg-gray-50">
-          <div className="font-semibold mb-2 text-gray-700">Bundle Antigo</div>
-          <div className="flex flex-col gap-2">
-            <input 
-              value={vtexOld.workspace} 
-              onChange={e => setVtexOld(o => ({...o, workspace: e.target.value}))} 
-              placeholder="Workspace" 
-              className="p-2 rounded border border-gray-300" 
-            />
-            <input 
-              value={vtexOld.account} 
-              onChange={e => setVtexOld(o => ({...o, account: e.target.value}))} 
-              placeholder="Account" 
-              className="p-2 rounded border border-gray-300" 
-            />
-            <input 
-              value={vtexOld.app} 
-              onChange={e => setVtexOld(o => ({...o, app: e.target.value}))} 
-              placeholder="App" 
-              className="p-2 rounded border border-gray-300" 
-            />
-            <input 
-              value={vtexOld.version} 
-              onChange={e => setVtexOld(o => ({...o, version: e.target.value}))} 
-              placeholder="Version" 
-              className="p-2 rounded border border-gray-300" 
-            />
-            <div className="flex gap-2 items-center">
-              <label className="font-medium">Ambiente:</label>
-              <select 
-                value={vtexOld.env} 
-                onChange={e => setVtexOld(o => ({...o, env: e.target.value}))} 
-                className="p-2 rounded border border-gray-300"
-              >
-                <option value="dev">dev</option>
-                <option value="prod">prod</option>
-              </select>
-              <label className="font-medium ml-2">Modo:</label>
-              <select 
-                value={vtexOld.mode} 
-                onChange={e => setVtexOld(o => ({...o, mode: e.target.value}))} 
-                className="p-2 rounded border border-gray-300"
-              >
-                <option value="dev">Desenvolvimento</option>
-                <option value="prod">Produção</option>
-              </select>
-            </div>
-            <input 
-              value={oldUrl} 
-              readOnly 
-              className="p-2 rounded border border-gray-300 bg-gray-100 text-gray-600 mt-2" 
-              placeholder="URL do relatório antigo gerada automaticamente" 
-            />
-          </div>
-        </div>
+        <Card style={{flex: 1}} variant="surface">
+          <Box p="4">
+            <Text weight="medium" mb="2" color="gray">Bundle Antigo</Text>
+            <Flex direction="column" gap="2">
+              <TextField.Root
+                  className="rt-reset rt-TextFieldInput"
+                  value={vtexOld.workspace}
+                  onChange={e => setVtexOld(o => ({...o, workspace: e.target.value}))}
+                  placeholder="Workspace"
+                />
+              
+              <TextField.Root
+                  className="rt-reset rt-TextFieldInput"
+                  value={vtexOld.account}
+                  onChange={e => setVtexOld(o => ({...o, account: e.target.value}))}
+                  placeholder="Account"
+                />
+              
+              <TextField.Root
+                  className="rt-reset rt-TextFieldInput"
+                  value={vtexOld.app}
+                  onChange={e => setVtexOld(o => ({...o, app: e.target.value}))}
+                  placeholder="App"
+              />
+              
+              <TextField.Root
+                  className="rt-reset rt-TextFieldInput"
+                  value={vtexOld.version}
+                  onChange={e => setVtexOld(o => ({...o, version: e.target.value}))}
+                  placeholder="Version"
+                />
+              
+              <Flex gap="2" align="center">
+                <Text weight="medium">Ambiente:</Text>
+                <Select.Root 
+                  value={vtexOld.env} 
+                  onValueChange={(value) => setVtexOld(o => ({...o, env: value}))}
+                >
+                  <Select.Trigger />
+                  <Select.Content>
+                    <Select.Item value="dev">dev</Select.Item>
+                    <Select.Item value="prod">prod</Select.Item>
+                  </Select.Content>
+                </Select.Root>
+                
+                <Text weight="medium" ml="2">Modo:</Text>
+                <Select.Root 
+                  value={vtexOld.mode} 
+                  onValueChange={(value) => setVtexOld(o => ({...o, mode: value}))}
+                >
+                  <Select.Trigger />
+                  <Select.Content>
+                    <Select.Item value="dev">Desenvolvimento</Select.Item>
+                    <Select.Item value="prod">Produção</Select.Item>
+                  </Select.Content>
+                </Select.Root>
+              </Flex>
+              
+              <TextField.Root
+                  className="rt-reset rt-TextFieldInput"
+                  value={oldUrl}
+                  readOnly
+                  style={{backgroundColor: 'var(--gray-3)'}}
+                  placeholder="URL do relatório antigo gerada automaticamente"
+                />
+            </Flex>
+          </Box>
+        </Card>
         
         {/* Novo */}
-        <div className="flex-1 border rounded p-4 bg-gray-50">
-          <div className="font-semibold mb-2 text-gray-700">Bundle Novo</div>
-          <div className="flex flex-col gap-2">
-            <input 
-              value={vtexNew.workspace} 
-              onChange={e => setVtexNew(o => ({...o, workspace: e.target.value}))} 
-              placeholder="Workspace" 
-              className="p-2 rounded border border-gray-300" 
-            />
-            <input 
-              value={vtexNew.account} 
-              onChange={e => setVtexNew(o => ({...o, account: e.target.value}))} 
-              placeholder="Account" 
-              className="p-2 rounded border border-gray-300" 
-            />
-            <input 
-              value={vtexNew.app} 
-              onChange={e => setVtexNew(o => ({...o, app: e.target.value}))} 
-              placeholder="App" 
-              className="p-2 rounded border border-gray-300" 
-            />
-            <input 
-              value={vtexNew.version} 
-              onChange={e => setVtexNew(o => ({...o, version: e.target.value}))} 
-              placeholder="Version" 
-              className="p-2 rounded border border-gray-300" 
-            />
-            <div className="flex gap-2 items-center">
-              <label className="font-medium">Ambiente:</label>
-              <select 
-                value={vtexNew.env} 
-                onChange={e => setVtexNew(o => ({...o, env: e.target.value}))} 
-                className="p-2 rounded border border-gray-300"
-              >
-                <option value="dev">dev</option>
-                <option value="prod">prod</option>
-              </select>
-              <label className="font-medium ml-2">Modo:</label>
-              <select 
-                value={vtexNew.mode} 
-                onChange={e => setVtexNew(o => ({...o, mode: e.target.value}))} 
-                className="p-2 rounded border border-gray-300"
-              >
-                <option value="dev">Desenvolvimento</option>
-                <option value="prod">Produção</option>
-              </select>
-            </div>
-            <input 
-              value={newUrl} 
-              readOnly 
-              className="p-2 rounded border border-gray-300 bg-gray-100 text-gray-600 mt-2" 
-              placeholder="URL do relatório novo gerada automaticamente" 
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+        <Card style={{flex: 1}} variant="surface">
+          <Box p="4">
+            <Text weight="medium" mb="2" color="gray">Bundle Novo</Text>
+            <Flex direction="column" gap="2">
+              <TextField.Root
+                  className="rt-reset rt-TextFieldInput"
+                  value={vtexNew.workspace}
+                  onChange={e => setVtexNew(o => ({...o, workspace: e.target.value}))}
+                  placeholder="Workspace"
+                />
+              
+              <TextField.Root
+                  className="rt-reset rt-TextFieldInput"
+                  value={vtexNew.account}
+                  onChange={e => setVtexNew(o => ({...o, account: e.target.value}))}
+                  placeholder="Account"
+                />
+              
+              <TextField.Root
+                  className="rt-reset rt-TextFieldInput"
+                  value={vtexNew.app}
+                  onChange={e => setVtexNew(o => ({...o, app: e.target.value}))}
+                  placeholder="App"
+                />
+              
+              <TextField.Root
+                  className="rt-reset rt-TextFieldInput"
+                  value={vtexNew.version}
+                  onChange={e => setVtexNew(o => ({...o, version: e.target.value}))}
+                  placeholder="Version"
+                />
+              
+              <Flex gap="2" align="center">
+                <Text weight="medium">Ambiente:</Text>
+                <Select.Root 
+                  value={vtexNew.env} 
+                  onValueChange={(value) => setVtexNew(o => ({...o, env: value}))}
+                >
+                  <Select.Trigger />
+                  <Select.Content>
+                    <Select.Item value="dev">dev</Select.Item>
+                    <Select.Item value="prod">prod</Select.Item>
+                  </Select.Content>
+                </Select.Root>
+                
+                <Text weight="medium" ml="2">Modo:</Text>
+                <Select.Root 
+                  value={vtexNew.mode} 
+                  onValueChange={(value) => setVtexNew(o => ({...o, mode: value}))}
+                >
+                  <Select.Trigger />
+                  <Select.Content>
+                    <Select.Item value="dev">Desenvolvimento</Select.Item>
+                    <Select.Item value="prod">Produção</Select.Item>
+                  </Select.Content>
+                </Select.Root>
+              </Flex>
+              
+              <TextField.Root>
+                <input
+                  className="rt-reset rt-TextFieldInput"
+                  value={newUrl}
+                  readOnly
+                  style={{backgroundColor: 'var(--gray-3)'}}
+                  placeholder="URL do relatório novo gerada automaticamente"
+                />
+              </TextField.Root>
+            </Flex>
+          </Box>
+        </Card>
+      </Flex>
+    </Flex>
   );
 };
 
