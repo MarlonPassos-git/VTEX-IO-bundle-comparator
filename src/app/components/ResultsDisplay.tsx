@@ -1,6 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import { ComparisonResult } from './types';
 import { formatBytes } from './utils/chartUtils';
+import { 
+  Card, 
+  Flex, 
+  Box, 
+  Text, 
+  Table, 
+  Badge, 
+  Heading, 
+  Grid, 
+  ScrollArea, 
+  Separator,
+  Inset
+} from '@radix-ui/themes';
 
 type ResultsDisplayProps = {
   results: ComparisonResult[];
@@ -64,152 +77,164 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   };
 
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-4 shadow rounded border-l-4 border-blue-500 transition-all hover:shadow-md">
-          <div className="text-xs uppercase text-gray-500 tracking-wider mb-1">TAMANHO DO BUNDLE</div>
-          <div className="font-mono text-lg">
+    <Flex direction="column" gap="6">
+      {/* Cards de métricas */}
+      <Grid columns={{initial: '1', md: '3'}} gapX="4" gapY="4">
+        <Card>
+          <Flex direction="column" gap="2">
+            <Text size="1" weight="bold" color="gray">TAMANHO DO BUNDLE</Text>
             {bundleSize.new > 0 ? (
-              <>
-                <div className="font-semibold">{formatBytes(bundleSize.new)}</div>
-                <div className="text-sm text-gray-400 flex items-center gap-1">
-                  <span>Antes:</span>
-                  <span>{formatBytes(bundleSize.old)}</span>
-                </div>
-                <div className={`text-xs flex items-center mt-1 ${bundleSize.diff < 0 ? 'text-green-600' : bundleSize.diff > 0 ? 'text-red-600' : 'text-gray-600'}`}>
-                  {bundleSize.diff < 0 ? '↓ ' : bundleSize.diff > 0 ? '↑ ' : ''}
-                  {formatBytes(Math.abs(bundleSize.diff))} 
-                  <span className="ml-1">
+              <Box>
+                <Text as="div" weight="bold" size="5">{formatBytes(bundleSize.new)}</Text>
+                <Text as="div" size="1" color="gray">Antes: {formatBytes(bundleSize.old)}</Text>
+                <Flex align="center" gap="1" mt="1">
+                  <Badge color={bundleSize.diff < 0 ? 'green' : bundleSize.diff > 0 ? 'red' : 'gray'}>
+                    {bundleSize.diff < 0 ? '↓ ' : bundleSize.diff > 0 ? '↑ ' : ''}
+                    {formatBytes(Math.abs(bundleSize.diff))} 
                     ({bundleSize.diff < 0 ? '-' : '+'}
                     {((Math.abs(bundleSize.diff) / (bundleSize.old || 1)) * 100).toFixed(2)}%)
-                  </span>
-                </div>
-              </>
-            ) : "-"}
-          </div>
-        </div>
-        <div className="bg-white p-4 shadow rounded border-l-4 border-purple-500 transition-all hover:shadow-md">
-          <div className="text-xs uppercase text-gray-500 tracking-wider mb-1">TAMANHO PARSEADO</div>
-          <div className="font-mono text-lg">
+                  </Badge>
+                </Flex>
+              </Box>
+            ) : <Text>-</Text>}
+          </Flex>
+        </Card>
+
+        <Card>
+          <Flex direction="column" gap="2">
+            <Text size="1" weight="bold" color="gray">TAMANHO PARSEADO</Text>
             {parsedSize.new > 0 ? (
-              <>
-                <div className="font-semibold">{formatBytes(parsedSize.new)}</div>
-                <div className="text-sm text-gray-400 flex items-center gap-1">
-                  <span>Antes:</span>
-                  <span>{formatBytes(parsedSize.old)}</span>
-                </div>
-                <div className={`text-xs flex items-center mt-1 ${parsedSize.diff < 0 ? 'text-green-600' : parsedSize.diff > 0 ? 'text-red-600' : 'text-gray-600'}`}>
-                  {parsedSize.diff < 0 ? '↓ ' : parsedSize.diff > 0 ? '↑ ' : ''}
-                  {formatBytes(Math.abs(parsedSize.diff))} 
-                  <span className="ml-1">
+              <Box>
+                <Text as="div" weight="bold" size="5">{formatBytes(parsedSize.new)}</Text>
+                <Text as="div" size="1" color="gray">Antes: {formatBytes(parsedSize.old)}</Text>
+                <Flex align="center" gap="1" mt="1">
+                  <Badge color={parsedSize.diff < 0 ? 'green' : parsedSize.diff > 0 ? 'red' : 'gray'}>
+                    {parsedSize.diff < 0 ? '↓ ' : parsedSize.diff > 0 ? '↑ ' : ''}
+                    {formatBytes(Math.abs(parsedSize.diff))} 
                     ({parsedSize.diff < 0 ? '-' : '+'}
                     {((Math.abs(parsedSize.diff) / (parsedSize.old || 1)) * 100).toFixed(2)}%)
-                  </span>
-                </div>
-              </>
-            ) : "-"}
-          </div>
-        </div>
-        <div className="bg-white p-4 shadow rounded border-l-4 border-green-500 transition-all hover:shadow-md">
-          <div className="text-xs uppercase text-gray-500 tracking-wider mb-1">TAMANHO GZIP</div>
-          <div className="font-mono text-lg">
+                  </Badge>
+                </Flex>
+              </Box>
+            ) : <Text>-</Text>}
+          </Flex>
+        </Card>
+
+        <Card>
+          <Flex direction="column" gap="2">
+            <Text size="1" weight="bold" color="gray">TAMANHO GZIP</Text>
             {gzipSize.new > 0 ? (
-              <>
-                <div className="font-semibold">{formatBytes(gzipSize.new)}</div>
-                <div className="text-sm text-gray-400 flex items-center gap-1">
-                  <span>Antes:</span>
-                  <span>{formatBytes(gzipSize.old)}</span>
-                </div>
-                <div className={`text-xs flex items-center mt-1 ${gzipSize.diff < 0 ? 'text-green-600' : gzipSize.diff > 0 ? 'text-red-600' : 'text-gray-600'}`}>
-                  {gzipSize.diff < 0 ? '↓ ' : gzipSize.diff > 0 ? '↑ ' : ''}
-                  {formatBytes(Math.abs(gzipSize.diff))} 
-                  <span className="ml-1">
+              <Box>
+                <Text as="div" weight="bold" size="5">{formatBytes(gzipSize.new)}</Text>
+                <Text as="div" size="1" color="gray">Antes: {formatBytes(gzipSize.old)}</Text>
+                <Flex align="center" gap="1" mt="1">
+                  <Badge color={gzipSize.diff < 0 ? 'green' : gzipSize.diff > 0 ? 'red' : 'gray'}>
+                    {gzipSize.diff < 0 ? '↓ ' : gzipSize.diff > 0 ? '↑ ' : ''}
+                    {formatBytes(Math.abs(gzipSize.diff))} 
                     ({gzipSize.diff < 0 ? '-' : '+'}
                     {((Math.abs(gzipSize.diff) / (gzipSize.old || 1)) * 100).toFixed(2)}%)
-                  </span>
-                </div>
-              </>
-            ) : "-"}
-          </div>
-        </div>
-      </div>
+                  </Badge>
+                </Flex>
+              </Box>
+            ) : <Text>-</Text>}
+          </Flex>
+        </Card>
+      </Grid>
 
+      {/* Arquivos adicionados e removidos */}
       {(added.length > 0 || removed.length > 0) && (
-        <div className="bg-white shadow p-4 rounded mb-6">
-          <h2 className="text-lg font-semibold mb-2">Arquivos Adicionados e Removidos</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="border rounded p-3">
-              <h3 className="text-md font-medium mb-2 text-green-700">Adicionados ({added.length})</h3>
-              {added.length > 0 ? (
-                <ul className="space-y-1 max-h-[200px] overflow-y-auto">
-                  {added.map((item, index) => (
-                    <li key={`added-${index}`} className="flex justify-between text-sm">
-                      <span className="font-mono truncate flex-1">{item.label}</span>
-                      <span className="text-green-600 ml-2 whitespace-nowrap">{formatBytes(item.statSize)}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500 text-sm italic">Nenhum arquivo adicionado</p>
-              )}
-            </div>
-            
-            <div className="border rounded p-3">
-              <h3 className="text-md font-medium mb-2 text-red-700">Removidos ({removed.length})</h3>
-              {removed.length > 0 ? (
-                <ul className="space-y-1 max-h-[200px] overflow-y-auto">
-                  {removed.map((item, index) => (
-                    <li key={`removed-${index}`} className="flex justify-between text-sm">
-                      <span className="font-mono truncate flex-1">{item.label}</span>
-                      <span className="text-red-600 ml-2 whitespace-nowrap">{formatBytes(item.statSize)}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500 text-sm italic">Nenhum arquivo removido</p>
-              )}
-            </div>
-          </div>
-        </div>
+        <Card>
+          <Flex direction="column" gap="4">
+            <Heading size="3">Arquivos Adicionados e Removidos</Heading>
+            <Separator size="4" />
+            <Grid columns={{initial: '1', md: '2'}} gapX="4" gapY="4">
+              <Box>
+                <Heading size="2" color="green" mb="2">Adicionados ({added.length})</Heading>
+                {added.length > 0 ? (
+                  <ScrollArea type="hover" scrollbars="vertical" style={{ height: 200 }}>
+                    <Flex direction="column" gap="1">
+                      {added.map((item, index) => (
+                        <Flex key={`added-${index}`} justify="between">
+                          <Text as="span" size="1" style={{ fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</Text>
+                          <Text as="span" size="1" color="green" style={{ whiteSpace: 'nowrap' }}>{formatBytes(item.statSize)}</Text>
+                        </Flex>
+                      ))}
+                    </Flex>
+                  </ScrollArea>
+                ) : (
+                  <Text size="1" color="gray" italic>Nenhum arquivo adicionado</Text>
+                )}
+              </Box>
+              
+              <Box>
+                <Heading size="2" color="red" mb="2">Removidos ({removed.length})</Heading>
+                {removed.length > 0 ? (
+                  <ScrollArea type="hover" scrollbars="vertical" style={{ height: 200 }}>
+                    <Flex direction="column" gap="1">
+                      {removed.map((item, index) => (
+                        <Flex key={`removed-${index}`} justify="between">
+                          <Text as="span" size="1" style={{ fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</Text>
+                          <Text as="span" size="1" color="red" style={{ whiteSpace: 'nowrap' }}>{formatBytes(item.statSize)}</Text>
+                        </Flex>
+                      ))}
+                    </Flex>
+                  </ScrollArea>
+                ) : (
+                  <Text size="1" color="gray" italic>Nenhum arquivo removido</Text>
+                )}
+              </Box>
+            </Grid>
+          </Flex>
+        </Card>
       )}
 
-      <div className="bg-white shadow p-4 rounded mb-6">
-        <h2 className="text-lg font-semibold mb-4">Visualização FoamTree (por Tamanho Parseado)</h2>
-        <div className="border rounded-md p-1 bg-gray-50">
-          <div ref={foamtreeRef} style={{ width: "100%", height: "400px" }}></div>
-          <div className="text-xs text-center text-gray-500 mt-2">Clique nos segmentos para ampliar. Clique duplo para voltar.</div>
-        </div>
-      </div>
+      {/* FoamTree visualization */}
+      <Card>
+        <Flex direction="column" gap="4">
+          <Heading size="3">Visualização FoamTree (por Tamanho Parseado)</Heading>
+          <Separator size="4" />
+          <Inset>
+            <Box style={{ width: "100%", height: "400px", borderRadius: "var(--radius-3)", overflow: 'hidden' }}>
+              <Box ref={foamtreeRef} style={{ width: "100%", height: "400px" }}></Box>
+            </Box>
+          </Inset>
+          <Text size="1" align="center" color="gray">Clique nos segmentos para ampliar. Clique duplo para voltar.</Text>
+        </Flex>
+      </Card>
 
+      {/* Tabela de resultados */}
       {results.length > 0 && (
-        <div className="bg-white shadow p-4 rounded">
-          <h2 className="text-lg font-semibold mb-4">Resultados da Comparação</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="p-3 text-left border-b border-gray-200 font-semibold text-gray-700">Rótulo</th>
-                  <th className="p-3 text-left border-b border-gray-200 font-semibold text-gray-700">Tamanho Bruto</th>
-                  <th className="p-3 text-left border-b border-gray-200 font-semibold text-gray-700">Tamanho Parseado</th>
-                  <th className="p-3 text-left border-b border-gray-200 font-semibold text-gray-700">Tamanho Gzip</th>
-                </tr>
-              </thead>
-              <tbody>
-                {results.map((row, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="p-3 border-b border-gray-200 font-mono text-xs">{row.label}</td>
-                    <td className="p-3 border-b border-gray-200" dangerouslySetInnerHTML={{ __html: row.statSize.label }}></td>
-                    <td className="p-3 border-b border-gray-200" dangerouslySetInnerHTML={{ __html: row.parsedSize.label }}></td>
-                    <td className="p-3 border-b border-gray-200" dangerouslySetInnerHTML={{ __html: row.gzipSize.label }}></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <Card>
+          <Flex direction="column" gap="4">
+            <Heading size="3">Resultados da Comparação</Heading>
+            <Separator size="4" />
+            <Box style={{ overflowX: 'auto' }}>
+              <Table.Root>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>Rótulo</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Tamanho Bruto</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Tamanho Parseado</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Tamanho Gzip</Table.ColumnHeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                
+                <Table.Body>
+                  {results.map((row, index) => (
+                    <Table.Row key={index}>
+                      <Table.Cell style={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>{row.label}</Table.Cell>
+                      <Table.Cell dangerouslySetInnerHTML={{ __html: row.statSize.label }}></Table.Cell>
+                      <Table.Cell dangerouslySetInnerHTML={{ __html: row.parsedSize.label }}></Table.Cell>
+                      <Table.Cell dangerouslySetInnerHTML={{ __html: row.gzipSize.label }}></Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+            </Box>
+          </Flex>
+        </Card>
       )}
-    </>
+    </Flex>
   );
 };
 
