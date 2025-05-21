@@ -162,7 +162,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                     </Flex>
                   </ScrollArea>
                 ) : (
-                  <Text size="1" color="gray" italic>Nenhum arquivo adicionado</Text>
+                  <Text size="1" color="gray" className='italic'>Nenhum arquivo adicionado</Text>
                 )}
               </Box>
               
@@ -180,7 +180,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                     </Flex>
                   </ScrollArea>
                 ) : (
-                  <Text size="1" color="gray" italic>Nenhum arquivo removido</Text>
+                  <Text size="1" color="gray" className='italic'>Nenhum arquivo removido</Text>
                 )}
               </Box>
             </Grid>

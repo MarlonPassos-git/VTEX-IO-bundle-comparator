@@ -14,7 +14,6 @@ import {
   Card
 } from "@radix-ui/themes";
 
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChartData, ComparisonResult, VtexBundleState } from './types';
 import { extractChartDataFromHTML, runComparison } from './utils/chartUtils';
